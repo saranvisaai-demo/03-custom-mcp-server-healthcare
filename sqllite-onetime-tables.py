@@ -11,7 +11,7 @@ Includes 10 patients with varied conditions:
   - A healthy young patient (low risk baseline)
 """
 
-from db import get_connection, create_tables
+from sqllite_onetime_db import get_connection, create_tables
 
 # --------------------------------------------------------------------------
 # Patient demographics
