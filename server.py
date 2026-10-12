@@ -13,6 +13,7 @@ The server listens on:
 
 import os
 
+from dotenv import load_dotenv
 from mcp.server.fastmcp import FastMCP
 from mcp.server.transport_security import TransportSecuritySettings
 from starlette.middleware.cors import CORSMiddleware
@@ -33,7 +34,13 @@ from tools.query_tool    import query_patient_database
 # "421 Invalid Host header", even though uvicorn is bound to 0.0.0.0.
 # ALLOWED_HOSTS lets the server be reached by its public IP/hostname while
 # keeping the protection enabled (rather than disabling it outright).
+#
+# ALLOWED_HOSTS is optional: load_dotenv() silently no-ops if no .env file
+# is present (e.g. running locally), so the same code runs unchanged on a
+# laptop (falls back to the localhost-only default below) and on a VPS
+# (reads the public host from .env). See .env.example.
 # --------------------------------------------------------------------------
+load_dotenv()
 ALLOWED_HOSTS = [h.strip() for h in os.getenv("ALLOWED_HOSTS", "127.0.0.1:*,localhost:*").split(",") if h.strip()]
 
 mcp = FastMCP(

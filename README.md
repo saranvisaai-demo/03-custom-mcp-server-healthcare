@@ -95,12 +95,21 @@ The MCP SDK rejects any request whose `Host` header isn't `127.0.0.1`/
 `localhost` by default (DNS-rebinding protection), even though uvicorn binds
 to `0.0.0.0`. To reach the server from outside the host, set `ALLOWED_HOSTS`
 to the host/IP clients will connect through (comma-separated, `:*` matches
-any port) before starting it:
+any port).
+
+This is optional and read from a local `.env` file (via `python-dotenv`),
+so the same `server.py` runs unchanged on your laptop and on a VPS — no
+`.env` present just means it falls back to the localhost-only default:
 
 ```bash
-export ALLOWED_HOSTS="<public-ip-or-domain>:8000,127.0.0.1:*,localhost:*"
+cp .env.example .env
+# edit .env and set ALLOWED_HOSTS to the real public IP/domain:port
 python server.py
 ```
+
+`.env` is gitignored — never commit the real IP/domain. You can still use
+`export ALLOWED_HOSTS=...` instead of `.env` if you prefer; the env var
+takes the same effect either way.
 
 You'll also need the firewall to allow inbound traffic on port 8000 (e.g.
 `sudo ufw allow 8000/tcp`). Treat this the same as the SQL-query trust-boundary
