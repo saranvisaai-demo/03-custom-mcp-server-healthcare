@@ -1,0 +1,25 @@
+# SQLite database (generated locally, not source)
+*.db
+*.sqlite
+*.sqlite3
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+*.egg
+build/
+dist/
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# Environment variables / secrets
+.env
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
