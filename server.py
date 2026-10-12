@@ -25,7 +25,8 @@ from tools.query_tool    import query_patient_database
 # FastMCP handles tool registration, schema generation, and SSE transport
 # --------------------------------------------------------------------------
 mcp = FastMCP(
-    name="healthcare-mcp-server"
+    name="healthcare-mcp-server",
+    stateless_http=True,
 )
 # --------------------------------------------------------------------------
 # Tool 1A — Patient Risk Summary
