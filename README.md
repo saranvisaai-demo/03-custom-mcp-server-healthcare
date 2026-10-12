@@ -44,6 +44,41 @@ python sqllite_onetime_tables.py   # seeds it with 10 sample patients
 `sqllite_onetime_tables.py` is idempotent — it deletes existing rows before
 re-inserting, so it's safe to re-run.
 
+## Running a test query against the database
+
+Once `patients.db` exists (after the seed step above), you can query it
+directly with the `sqlite3` CLI, without going through the MCP server at all:
+
+```bash
+sqlite3 patients.db
+```
+
+Then at the `sqlite>` prompt:
+
+```sql
+.tables                              -- list all tables
+.schema patients                     -- show a table's schema
+SELECT * FROM patients LIMIT 5;      -- sample some rows
+SELECT name, age FROM patients WHERE age > 70;
+.quit
+```
+
+Or run a one-off query without entering the interactive shell:
+
+```bash
+sqlite3 patients.db "SELECT name, age, gender FROM patients ORDER BY age DESC;"
+```
+
+To exercise the same read-only path the MCP server uses (including the
+`SELECT`-only safety check), call the `query_tool.py` module directly instead:
+
+```bash
+python tools/query_tool.py
+```
+
+This runs a few canned queries (a valid `SELECT`, a rejected `DELETE`, and a
+`JOIN`) and prints the JSON each one returns.
+
 ## Running the server
 
 ```bash
