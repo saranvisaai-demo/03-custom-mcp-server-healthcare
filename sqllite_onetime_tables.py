@@ -1,8 +1,8 @@
 """
-seed_data.py — Populates patients.db with realistic sample data.
+sqllite_onetime_tables.py — Populates patients.db with realistic sample data.
 
 Run this script once after creating the database:
-    python seed_data.py
+    python sqllite_onetime_tables.py
 
 Includes 10 patients with varied conditions:
   - Diabetic patients
