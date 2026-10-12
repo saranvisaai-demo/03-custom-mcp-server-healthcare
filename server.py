@@ -11,7 +11,10 @@ The server listens on:
     http://0.0.0.0:8000/mcp
 """
 
+import os
+
 from mcp.server.fastmcp import FastMCP
+from mcp.server.transport_security import TransportSecuritySettings
 from starlette.middleware.cors import CORSMiddleware
 
 # Import the four tool functions we built
@@ -23,10 +26,26 @@ from tools.query_tool    import query_patient_database
 # --------------------------------------------------------------------------
 # Create the MCP server instance
 # FastMCP handles tool registration, schema generation, and SSE transport
+#
+# FastMCP defaults to host="127.0.0.1", which auto-enables DNS-rebinding
+# protection restricted to localhost Host headers — any request arriving
+# with a different Host (e.g. the VPS's public IP) gets rejected with
+# "421 Invalid Host header", even though uvicorn is bound to 0.0.0.0.
+# ALLOWED_HOSTS lets the server be reached by its public IP/hostname while
+# keeping the protection enabled (rather than disabling it outright).
 # --------------------------------------------------------------------------
+ALLOWED_HOSTS = [h.strip() for h in os.getenv("ALLOWED_HOSTS", "127.0.0.1:*,localhost:*").split(",") if h.strip()]
+
 mcp = FastMCP(
     name="healthcare-mcp-server",
     stateless_http=True,
+    host="0.0.0.0",
+    port=8000,
+    transport_security=TransportSecuritySettings(
+        enable_dns_rebinding_protection=True,
+        allowed_hosts=ALLOWED_HOSTS,
+        allowed_origins=["*"],
+    ),
 )
 # --------------------------------------------------------------------------
 # Tool 1A — Patient Risk Summary

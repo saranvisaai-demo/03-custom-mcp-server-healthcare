@@ -89,6 +89,25 @@ python server.py
 Starts a Streamable HTTP MCP server at `http://0.0.0.0:8000/mcp` with CORS
 enabled (so browser-based tools like MCP Inspector can connect).
 
+### Accessing it from another machine (e.g. a VPS)
+
+The MCP SDK rejects any request whose `Host` header isn't `127.0.0.1`/
+`localhost` by default (DNS-rebinding protection), even though uvicorn binds
+to `0.0.0.0`. To reach the server from outside the host, set `ALLOWED_HOSTS`
+to the host/IP clients will connect through (comma-separated, `:*` matches
+any port) before starting it:
+
+```bash
+export ALLOWED_HOSTS="<public-ip-or-domain>:8000,127.0.0.1:*,localhost:*"
+python server.py
+```
+
+You'll also need the firewall to allow inbound traffic on port 8000 (e.g.
+`sudo ufw allow 8000/tcp`). Treat this the same as the SQL-query trust-boundary
+note above: don't expose this server to untrusted networks without adding
+real auth in front of it (API key, reverse proxy with TLS, etc.) — CORS and
+host checks alone don't authenticate callers.
+
 ## Testing
 
 Each tool module can be run standalone to exercise its logic directly against

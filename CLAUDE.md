@@ -46,6 +46,17 @@ directly (each has an `if __name__ == "__main__"` block), or run
   `.upper().startswith("SELECT")` string check — it is not a real SQL
   sandbox. Do not extend this tool's trust boundary (e.g. exposing it over a
   public network) without adding real query validation/sandboxing first.
+- `server.py` sets `host="0.0.0.0"` and an explicit `transport_security`
+  (`TransportSecuritySettings`) on the `FastMCP(...)` instance so the server
+  can be reached from outside localhost. By default the MCP SDK auto-enables
+  DNS-rebinding protection restricted to `127.0.0.1`/`localhost` Host headers
+  whenever `host` isn't set — any other `Host` header gets a `421`, even
+  though uvicorn itself binds to `0.0.0.0`. `ALLOWED_HOSTS` (env var, comma-
+  separated, defaults to localhost-only) controls which Host headers are
+  accepted; set it to the server's public IP/domain (with port) when exposing
+  it remotely. Never put the actual IP/domain value into this repo — it's
+  shell/env-only, same trust-boundary caution as the SQL tool above: host
+  validation and CORS are not authentication.
 
 ## When adding a new tool
 
