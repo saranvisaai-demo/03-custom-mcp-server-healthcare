@@ -60,6 +60,7 @@ Then at the `sqlite>` prompt:
 .schema patients                     -- show a table's schema
 SELECT * FROM patients LIMIT 5;      -- sample some rows
 SELECT name, age FROM patients WHERE age > 70;
+Insert into patients values (11,'Bob',90,'M','B+','555-1234','2026-10-12 13:24:54');
 .quit
 ```
 
