@@ -83,6 +83,8 @@ This runs a few canned queries (a valid `SELECT`, a rejected `DELETE`, and a
 ## Running the server
 
 ```bash
+Pre-req: create .env and update ALLOWED_HOSTS. This is Important if you are using Public IP like Vps
+  Ex: ALLOWED_HOSTS=<public-ip-or-domain>:8000,127.0.0.1:*,localhost:*
 python server.py
 ```
 
