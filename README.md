@@ -1,5 +1,7 @@
 # Healthcare MCP Server
 
+# Updated M8ven score
+
 A custom [MCP](https://modelcontextprotocol.io/) server exposing healthcare
 analytics tools over Streamable HTTP, backed by a local SQLite database of
 synthetic patient data. Built with FastMCP so each Python function becomes an
